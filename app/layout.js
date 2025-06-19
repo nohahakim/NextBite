@@ -1,4 +1,4 @@
-import MainHeader from "@/components/main-header";
+import MainHeader from "@/components/main-header/main-header";
 import "./globals.css";
 
 export const metadata = {
@@ -12,9 +12,6 @@ export default function RootLayout({ children }) {
       <body>
         <MainHeader />
 
-        <svg width="100%" height="200">
-          <rect width="100%" height="200" fill="#d4a017" />
-        </svg>
         {children}
       </body>
     </html>
