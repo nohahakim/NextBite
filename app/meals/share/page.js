@@ -1,59 +1,104 @@
 "use client";
 
 import { useFormState } from "react-dom";
-import { shareMeal } from "@/lib/actions";
-
 import ImagePicker from "@/components/meals/image-picker";
 import classes from "./page.module.css";
+import { shareMeal } from "@/lib/actions";
 import MealsFormSubmit from "@/components/meals/meals-form-submit";
 
 export default function ShareMealPage() {
   const [state, formAction] = useFormState(shareMeal, { message: null });
 
   return (
-    <>
+    <div className={classes.container}>
       <header className={classes.header}>
         <h1>
-          Share your <span className={classes.highlight}>favorite meal</span>
+          Share your <span className={classes.highlight}>gourmet creation</span>
         </h1>
-        <p>Or any other meal you feel needs sharing!</p>
+        <p>
+          Inspire our community with your exquisite recipes and cooking
+          expertise.
+        </p>
       </header>
+
       <main className={classes.main}>
         <form className={classes.form} action={formAction}>
           <div className={classes.row}>
-            <p>
-              <label htmlFor="name">Your name</label>
-              <input type="text" id="name" name="name" required />
-            </p>
-            <p>
-              <label htmlFor="email">Your email</label>
-              <input type="email" id="email" name="email" required />
-            </p>
+            <div className={classes.formGroup}>
+              <label htmlFor="name">Your Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                className={classes.input}
+                placeholder="John Doe"
+              />
+            </div>
+            <div className={classes.formGroup}>
+              <label htmlFor="email">Your Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                className={classes.input}
+                placeholder="john@example.com"
+              />
+            </div>
           </div>
-          <p>
-            <label htmlFor="title">Title</label>
-            <input type="text" id="title" name="title" required />
-          </p>
-          <p>
+
+          <div className={classes.formGroup}>
+            <label htmlFor="title">Recipe Title</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              required
+              className={classes.input}
+              placeholder="Amazing Chocolate Cake"
+            />
+          </div>
+
+          <div className={classes.formGroup}>
             <label htmlFor="summary">Short Summary</label>
-            <input type="text" id="summary" name="summary" required />
-          </p>
-          <p>
+            <textarea
+              id="summary"
+              name="summary"
+              required
+              className={classes.textarea}
+              placeholder="Describe your recipe in a few sentences"
+            ></textarea>
+          </div>
+
+          <div className={classes.formGroup}>
             <label htmlFor="instructions">Instructions</label>
             <textarea
               id="instructions"
               name="instructions"
               rows="10"
               required
+              className={classes.textarea}
+              placeholder="Step-by-step instructions..."
             ></textarea>
-          </p>
-          <ImagePicker label="Your image" name="image" />
-          {state.message && <p>{state.message}</p>}
-          <p className={classes.actions}>
+          </div>
+
+          <div className={classes.formGroup}>
+            <label>Recipe Image</label>
+            <ImagePicker label="Your image" name="image" />
+          </div>
+
+          {state.message && (
+            <div className={classes.message}>
+              <p>{state.message}</p>
+            </div>
+          )}
+
+          <div className={classes.actions}>
             <MealsFormSubmit />
-          </p>
+          </div>
         </form>
       </main>
-    </>
+    </div>
   );
 }
