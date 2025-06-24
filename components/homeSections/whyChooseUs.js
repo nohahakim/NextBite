@@ -7,8 +7,8 @@ export default function WhyChooseUs() {
       <div className={classes.sectionHeader}>
         <h2>Why Gourmet Lovers Choose Us</h2>
         <p>
-          We're not just a recipe site - we're a movement dedicated to elevating
-          culinary experiences.
+          We&rsquo;re not just a recipe site - we&rsquo;re a movement dedicated
+          to elevating culinary experiences.
         </p>
       </div>
 

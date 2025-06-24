@@ -23,11 +23,6 @@ export default function ShareMealPage() {
 
       <main className={classes.main}>
         <form className={classes.form} action={formAction}>
-          <input
-            type="hidden"
-            name="admin_secret"
-            value={process.env.NEXT_PUBLIC_ADMIN_TOKEN}
-          />
           <div className={classes.row}>
             <div className={classes.formGroup}>
               <label htmlFor="name">Your Name</label>
