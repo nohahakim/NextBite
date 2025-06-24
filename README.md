@@ -1,36 +1,152 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NextBite Food - Food Sharing Community
 
-## Getting Started
+## Overview
 
-First, run the development server:
+NextBite Food is a modern food sharing platform built with Next.js that allows food enthusiasts to discover, share, and discuss delicious recipes. The application features:
+
+- 🍔 Meal browsing with search and pagination
+- 📸 Image uploads using UploadThing
+- 👥 Community features for food lovers
+- 🧩 Responsive design with animations
+- ⚡️ Optimized performance with Next.js
+
+## Features
+
+### Core Functionality
+
+- **Meal Discovery**: Browse delicious recipes with pagination
+- **Advanced Search**: Find meals by keywords
+- **Meal Sharing**: Submit your own recipes with image uploads
+- **Community Engagement**: Connect with other food enthusiasts
+- **Responsive Design**: Works on all device sizes
+
+### Technical Highlights
+
+- **UploadThing Integration**: For seamless image uploads
+- **Pagination**: Efficient browsing of meal collections
+- **Search Functionality**: Find meals quickly
+- **Client-Side & Server-Side Rendering**: Optimal performance
+- **Form Handling**: Robust form submission with validation
+- **Animations**: Smooth UI transitions and loading states
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/nohahakim/NextBite.git
+cd NextBite
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Set up environment variables:
+
+```bash
+cp .env.example .env.local
+```
+
+Fill in your UploadThing credentials:
+
+```env
+UPLOADTHING_SECRET=your_uploadthing_secret
+UPLOADTHING_APP_ID=your_uploadthing_app_id
+UPLOADTHING_TOKEN=your_uploadthing_token
+```
+
+4. Initialize the database:
+
+```bash
+node initdb.js
+```
+
+5. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Structure
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```
+├── app/                  # Main application
+│   ├── community/        # Community features
+│   ├── meals/            # Meal-related pages
+│   │   ├── [mealSlug]/   # Individual meal pages
+│   │   ├── share/        # Meal sharing functionality
+│   │   └── page.js       # Main meals page
+│   ├── globals.css       # Global styles
+│   ├── layout.js         # Main layout
+│   └── page.js           # Home page
+├── components/           # Reusable components
+│   ├── images/           # Image components
+│   ├── main-header/      # Navigation header
+│   └── meals/            # Meal-related components
+├── lib/                  # Utility functions
+│   ├── actions.js        # Server actions
+│   └── meals.js          # Meal database operations
+├── public/               # Static assets
+└── styles/               # CSS modules
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Key Technologies
 
-## Learn More
+- **Next.js 15** - React framework for server-rendered applications
+- **UploadThing** - For handling image uploads
+- **SQLite** - Lightweight database for meal storage
+- **React DOM** - For client-side interactivity
+- **CSS Modules** - For component-scoped styling
+- **AWS SDK** - For image storage (optional)
 
-To learn more about Next.js, take a look at the following resources:
+## Customizations Added
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 1. Search Functionality
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Implemented a robust search system that allows users to:
 
-## Deploy on Vercel
+- Filter meals by keywords in titles
+- See instant results
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 2. Pagination System
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Added a pagination feature that:
+
+- Splits meal listings into manageable pages
+- Shows 10 meals per page by default
+- Provides intuitive navigation controls
+- Maintains search context across pages
+
+### 3. UploadThing Integration
+
+## Usage
+
+### Browsing Meals
+
+1. Visit the `/meals` page
+2. Use the search bar to find specific meals
+3. Navigate through pages using pagination controls
+
+### Sharing a Meal
+
+1. Click "Share Your Favorite Recipe"
+2. Fill in meal details
+3. Upload an image using the UploadThing widget
+4. Submit your recipe
+
+### Joining the Community
+
+1. Visit the `/community` page
+2. Learn about community perks
+3. Engage with other food enthusiasts
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+Enjoy cooking and sharing delicious meals with NextBite Food! 🍳👨‍🍳👩‍🍳
