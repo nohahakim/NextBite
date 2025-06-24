@@ -1,0 +1,57 @@
+.pagination {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+}
+
+.link {
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  background: linear-gradient(90deg, #f9572a, #ff8a05);
+  color: #ffffff;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.link:hover {
+  background: linear-gradient(90deg, #fd4715, #f9b241);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(242, 100, 18, 0.3);
+}
+
+.active {
+  background: linear-gradient(90deg, #fd4715, #f9b241);
+  font-weight: bold;
+}
+.pageInfoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pageInfo {
+  background: rgba(249, 178, 65, 0.15);
+  color: #e65100;
+  padding: 0.5rem 1.25rem;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.currentPage {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #f9572a;
+}
+
+.totalPages {
+  font-weight: 700;
+  color: #ff8a05;
+}

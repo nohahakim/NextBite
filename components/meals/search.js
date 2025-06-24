@@ -15,6 +15,7 @@ export default function Search() {
     const searchTerm = formData.get("search");
 
     const params = new URLSearchParams(searchParams.toString());
+    params.delete("page");
     if (searchTerm) {
       params.set("search", searchTerm);
     } else {

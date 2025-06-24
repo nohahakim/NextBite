@@ -1,13 +1,13 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import ImagePicker from "@/components/meals/image-picker";
 import classes from "./page.module.css";
 import { shareMeal } from "@/lib/actions";
 import MealsFormSubmit from "@/components/meals/meals-form-submit";
 
 export default function ShareMealPage() {
-  const [state, formAction] = useFormState(shareMeal, { message: null });
+  const [state, formAction] = useActionState(shareMeal, { message: null });
 
   return (
     <div className={classes.container}>
@@ -23,6 +23,11 @@ export default function ShareMealPage() {
 
       <main className={classes.main}>
         <form className={classes.form} action={formAction}>
+          <input
+            type="hidden"
+            name="admin_secret"
+            value={process.env.NEXT_PUBLIC_ADMIN_TOKEN}
+          />
           <div className={classes.row}>
             <div className={classes.formGroup}>
               <label htmlFor="name">Your Name</label>

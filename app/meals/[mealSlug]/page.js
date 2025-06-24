@@ -7,7 +7,7 @@ import classes from "./page.module.css";
 
 export async function generateMetadata({ params }) {
   const { mealSlug } = await params;
-  const meal = getMeal(mealSlug);
+  const meal = await getMeal(mealSlug);
 
   if (!meal) {
     notFound();
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }) {
   };
 }
 export async function generateStaticParams() {
-  const meals = await getMeals();
+  const { meals } = await getMeals({});
 
   return meals.map((meal) => ({
     mealSlug: meal.slug,
