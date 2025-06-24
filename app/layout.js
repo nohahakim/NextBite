@@ -1,4 +1,5 @@
 import MainHeader from "@/components/main-header/main-header";
+import Footer from "@/components/shared/footer";
 import "./globals.css";
 
 export const metadata = {
@@ -13,6 +14,10 @@ export default function RootLayout({ children }) {
         <MainHeader />
 
         {children}
+        <Footer />
+
+        {/* Optional: Add a script tag for any client-side JavaScript */}
+        {/* <script src="/path/to/your/script.js"></script> */}
       </body>
     </html>
   );

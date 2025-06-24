@@ -1,32 +1,52 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
-
-import MainHeaderBackground from "./main-header-background";
-import logoImg from "@/assets/logo.png";
-import classes from "./main-header.module.css";
+import { useState } from "react";
 import NavLink from "./nav-link";
+import classes from "./main-header.module.css";
+import { FaBars, FaTimes, FaUtensils } from "react-icons/fa";
 
 export default function MainHeader() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
   return (
-    <>
-      <MainHeaderBackground />
-      <header className={classes.header}>
+    <header className={classes.header}>
+      <div className={classes.container}>
         <Link className={classes.logo} href="/">
-          <Image src={logoImg} alt="A plate with food on it" priority />
-          NextLevel Food
+          <div className={classes.logoIcon}>
+            <FaUtensils className={classes.logoIconImage} />
+          </div>
+          <span className={classes.logoText}>NextBite Food</span>
         </Link>
 
-        <nav className={classes.nav}>
-          <ul>
+        <nav className={`${classes.nav} ${isMenuOpen ? classes.open : ""}`}>
+          <ul className={classes.navList}>
             <li>
-              <NavLink href="/meals">Browse Meals</NavLink>
+              <NavLink href="/meals">Browse Recipes</NavLink>
             </li>
             <li>
-              <NavLink href="/community">Foodies Community</NavLink>
+              <NavLink href="/community">Community</NavLink>
+            </li>
+            <li>
+              <NavLink href="/meals/share">Share Recipe</NavLink>
             </li>
           </ul>
         </nav>
-      </header>
-    </>
+
+        <button
+          className={classes.menuButton}
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          {isMenuOpen ? (
+            <FaTimes className="fas fa-times" />
+          ) : (
+            <FaBars className="fas fa-bars" />
+          )}
+        </button>
+      </div>
+    </header>
   );
 }

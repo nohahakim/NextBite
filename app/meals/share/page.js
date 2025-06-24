@@ -13,7 +13,7 @@ export default function ShareMealPage() {
     <div className={classes.container}>
       <header className={classes.header}>
         <h1>
-          Share your <span className={classes.highlight}>gourmet creation</span>
+          Share your <span className={classes.highlight}>favorite meal</span>
         </h1>
         <p>
           Inspire our community with your exquisite recipes and cooking

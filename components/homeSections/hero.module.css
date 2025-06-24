@@ -1,0 +1,136 @@
+.heroSection {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(30, 30, 30, 0.9) 0%,
+    rgba(30, 30, 30, 0.7) 100%
+  );
+  z-index: 1;
+}
+
+.parallax {
+  position: absolute;
+  inset: 0;
+  background-image: url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  z-index: 0;
+}
+
+.heroContent {
+  position: relative;
+  max-width: 1400px;
+  margin: 9rem auto;
+  padding: 2rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  z-index: 2;
+}
+
+@media (min-width: 992px) {
+  .heroContent {
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+  }
+}
+
+.heroText h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: var(--light);
+}
+
+.heroText h1 span {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroText p {
+  font-size: 1.25rem;
+  color: rgba(245, 245, 245, 0.9);
+  margin-bottom: 2rem;
+  max-width: 90%;
+}
+
+.heroButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btnPrimary {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.btnPrimary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(211, 47, 47, 0.3),
+    0 4px 6px -2px rgba(211, 47, 47, 0.2);
+}
+
+.btnOutline {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.btnOutline:hover {
+  background: rgba(211, 47, 47, 0.1);
+  transform: translateY(-3px);
+}
+
+.slideshowContainer {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  height: 400px;
+}
+
+@media (min-width: 992px) {
+  .slideshowContainer {
+    height: 500px;
+  }
+}
+
+.slideshow {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    background-attachment: scroll;
+  }
+}

@@ -1,43 +1,141 @@
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  padding: 1rem 0;
+  backdrop-filter: blur(10px);
+  background-color: rgba(30, 30, 30, 0.9);
+  border-bottom: 1px solid rgba(211, 47, 47, 0.2);
+}
+
+.container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 1rem;
-}
-
-@media (min-width: 768px) {
-  .header {
-    padding: 2rem 10%;
-  }
-}
-
-.nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 1.5rem;
-  /* font-family: 'Montserrat', sans-serif; */
-  font-size: 1.25rem;
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  max-width: 85rem;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 2rem;
+  gap: 0.75rem;
   text-decoration: none;
-  color: #ddd6cb;
-  font-weight: bold;
-  font-family: "Montserrat", sans-serif;
-  letter-spacing: 0.15rem;
-  text-transform: uppercase;
-  font-size: 1.5rem;
 }
 
-.logo img {
-  width: 5rem;
-  height: 5rem;
-  object-fit: contain;
-  filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.5));
+.logoIcon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #d32f2f, #ff8a05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.logoIcon i {
+  color: white;
+  font-size: 1.25rem;
+}
+
+.logoText {
+  font-size: 1.25rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #d32f2f, #ff8a05);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navList {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menuButton {
+  display: none;
+  background: none;
+  border: none;
+  color: #f5f5f5;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    position: fixed;
+    top: 5rem;
+    left: 0;
+    width: 100%;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    transform: translateY(-150%);
+    transition: transform 0.3s ease;
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(211, 47, 47, 0.2);
+  }
+
+  .nav.open {
+    transform: translateY(0);
+  }
+
+  .navList {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0 1.5rem;
+  }
+
+  .menuButton {
+    display: block;
+  }
+}
+
+/* //new */
+
+/* HEADER FIXES */
+/* ... existing styles ... */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  flex-shrink: 0; /* Prevents logo from shrinking */
+}
+
+.logoIcon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #d32f2f, #ff8a05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Remove unused .logoIcon i rule */
+
+.logoIconImage {
+  color: white;
+  font-size: 1.25rem;
+  display: block; /* Ensures proper icon alignment */
+}
+
+.logoText {
+  font-size: 1.25rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #d32f2f, #ff8a05);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1; /* Fixes vertical alignment */
+}
+
+/* ... existing media queries ... */

@@ -12,8 +12,7 @@ export default function CommunityPage() {
       {/* headline */}
       <header className={classes.header}>
         <h1>
-          One Shared Passion:{" "}
-          <span className={classes.gradientText}>Gourmet Food</span>
+          One Shared Passion: <span className={classes.gradientText}>Food</span>
         </h1>
         <p>
           Join our vibrant community of culinary enthusiasts and elevate your
