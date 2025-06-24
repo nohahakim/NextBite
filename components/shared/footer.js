@@ -68,7 +68,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/share-recipe" className={classes.link}>
+                <Link href="/meals/share" className={classes.link}>
                   Share Recipe
                 </Link>
               </li>

@@ -22,6 +22,9 @@
   margin: 0;
 }
 
+.cta {
+  margin-top: 1rem;
+}
 .cta a {
   display: inline-block;
   margin-top: 1rem;
