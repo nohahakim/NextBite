@@ -30,7 +30,6 @@ async function Meals({ searchTerm, page, pageSize }) {
   );
 }
 
-// ---------  FIXED HERE ------------
 export default async function MealsPage({ searchParams }) {
   const params = (await searchParams) ?? {}; // <-- await first
   const searchTerm = params.search ?? null;

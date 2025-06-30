@@ -35,7 +35,6 @@ export default async function MealDetailsPage({ params }) {
     notFound();
   }
 
-  // Format instructions to preserve line breaks
   const formattedInstructions = meal.instructions.replace(/\n/g, "<br />");
 
   return (
@@ -53,6 +52,7 @@ export default async function MealDetailsPage({ params }) {
             alt={meal.title}
             fill
             className={classes.image}
+            sizes="(min-width: 768px) 50vw, 100vw"
           />
         </div>
 
@@ -60,13 +60,7 @@ export default async function MealDetailsPage({ params }) {
           <h1 className={classes.title}>{meal.title}</h1>
 
           <div className={classes.creator}>
-            <p className={classes.creatorName}>by {meal.creator}</p>
-            <a
-              href={`mailto:${meal.creator_email}`}
-              className={classes.creatorEmail}
-            >
-              {meal.creator_email}
-            </a>
+            <p className={classes.creatorName}>by {meal.creator_name}</p>
           </div>
 
           <p className={classes.summary}>{meal.summary}</p>

@@ -3,7 +3,13 @@ import Image from "next/image";
 
 import classes from "./meal-item.module.css";
 
-export default function MealItem({ title, slug, image, summary, creator }) {
+export default function MealItem({
+  title,
+  slug,
+  image,
+  summary,
+  creator_name,
+}) {
   return (
     <article className={classes.meal}>
       <header>
@@ -17,7 +23,7 @@ export default function MealItem({ title, slug, image, summary, creator }) {
         </div>
         <div className={classes.headerText}>
           <h2>{title}</h2>
-          <p>by {creator}</p>
+          <p>by {creator_name}</p>
         </div>
       </header>
       <div className={classes.content}>

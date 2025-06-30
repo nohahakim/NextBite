@@ -5,6 +5,7 @@ import communityIcon from "@/assets/icons/community.png";
 import eventsIcon from "@/assets/icons/events.png";
 import showcaseImg from "@/assets/pizza.jpg"; // any local hero-style image
 import classes from "./page.module.css";
+import Link from "next/link";
 
 export default function CommunityPage() {
   return (
@@ -67,7 +68,9 @@ export default function CommunityPage() {
               Sign up today and start your culinary journey with thousands of
               food enthusiasts worldwide.
             </p>
-            <button className={classes.btnPrimary}>Create Free Account</button>
+            <Link href="/auth" className={classes.btnPrimary}>
+              Create Free Account
+            </Link>
           </div>
 
           <div className={classes.ctaImageBox}>
