@@ -1,199 +1,255 @@
-const sql = require('better-sqlite3');
-const db = sql('meals.db');
+/**
+ * initdb.js
+ * ----------
+ * Run once (e.g. `node initdb.js`) to bootstrap a fresh SQLite DB
+ * with the full schema + realistic seed data.
+ */
 
-const dummyMeals = [
+const path = require("path");
+const sql = require("better-sqlite3");
+
+// ------------------------------------------------------------
+// 1. Open / create the DB
+// ------------------------------------------------------------
+const dbPath = path.join(__dirname, "meals.db");
+const db = sql(dbPath);
+
+// enforce foreign-keys (they’re OFF by default in SQLite)
+db.exec("PRAGMA foreign_keys = ON;");
+
+// ------------------------------------------------------------
+// 2. Drop existing tables so the script is always idempotent
+// ------------------------------------------------------------
+db.exec(`
+  DROP TABLE IF EXISTS likes;
+  DROP TABLE IF EXISTS meals;
+  DROP TABLE IF EXISTS sessions;
+  DROP TABLE IF EXISTS users;
+`);
+
+// ------------------------------------------------------------
+// 3. Re-create the tables (matches the design you posted)
+// ------------------------------------------------------------
+db.exec(`
+  /* --- users --- */
+  CREATE TABLE users (
+    id       INTEGER PRIMARY KEY,
+    email    TEXT    UNIQUE NOT NULL,
+    password TEXT    NOT NULL,
+    name     TEXT    NOT NULL
+  );
+
+  /* --- sessions --- */
+  CREATE TABLE sessions (
+    id         TEXT    PRIMARY KEY,
+    expires_at INTEGER NOT NULL,
+    user_id    INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  /* --- meals --- */
+  CREATE TABLE meals (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    slug        TEXT    UNIQUE NOT NULL,
+    title       TEXT    NOT NULL,
+    image       TEXT    NOT NULL,
+    summary     TEXT    NOT NULL,
+    instructions TEXT   NOT NULL,
+    creator_id  INTEGER NOT NULL,
+    FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  /* --- likes (join table) --- */
+  CREATE TABLE likes (
+    user_id INTEGER NOT NULL,
+    meal_id INTEGER NOT NULL,
+    PRIMARY KEY (user_id, meal_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (meal_id) REFERENCES meals(id) ON DELETE CASCADE
+  );
+`);
+
+// ------------------------------------------------------------
+// 4. Dummy data
+// ------------------------------------------------------------
+
+// 4-A  users
+const dummyUsers = [
+  { id: 1, name: "John Doe", email: "johndoe@example.com", password: "secret" },
+  { id: 2, name: "Max Schwarz", email: "max@example.com", password: "secret" },
   {
-    title: 'Juicy Cheese Burger',
-    slug: 'juicy-cheese-burger',
-    image: 'burger.jpg',
-    summary:
-      'A mouth-watering burger with a juicy beef patty and melted cheese, served in a soft bun.',
-    instructions: `
-      1. Prepare the patty:
-         Mix 200g of ground beef with salt and pepper. Form into a patty.
-
-      2. Cook the patty:
-         Heat a pan with a bit of oil. Cook the patty for 2-3 minutes each side, until browned.
-
-      3. Assemble the burger:
-         Toast the burger bun halves. Place lettuce and tomato on the bottom half. Add the cooked patty and top with a slice of cheese.
-
-      4. Serve:
-         Complete the assembly with the top bun and serve hot.
-    `,
-    creator: 'John Doe',
-    creator_email: 'johndoe@example.com',
+    id: 3,
+    name: "Emily Chen",
+    email: "emilychen@example.com",
+    password: "secret",
   },
   {
-    title: 'Spicy Curry',
-    slug: 'spicy-curry',
-    image: 'curry.jpg',
-    summary:
-      'A rich and spicy curry, infused with exotic spices and creamy coconut milk.',
-    instructions: `
-      1. Chop vegetables:
-         Cut your choice of vegetables into bite-sized pieces.
-
-      2. Sauté vegetables:
-         In a pan with oil, sauté the vegetables until they start to soften.
-
-      3. Add curry paste:
-         Stir in 2 tablespoons of curry paste and cook for another minute.
-
-      4. Simmer with coconut milk:
-         Pour in 500ml of coconut milk and bring to a simmer. Let it cook for about 15 minutes.
-
-      5. Serve:
-         Enjoy this creamy curry with rice or bread.
-    `,
-    creator: 'Max Schwarz',
-    creator_email: 'max@example.com',
+    id: 4,
+    name: "Laura Smith",
+    email: "laurasmith@example.com",
+    password: "secret",
   },
   {
-    title: 'Homemade Dumplings',
-    slug: 'homemade-dumplings',
-    image: 'dumplings.jpg',
-    summary:
-      'Tender dumplings filled with savory meat and vegetables, steamed to perfection.',
-    instructions: `
-      1. Prepare the filling:
-         Mix minced meat, shredded vegetables, and spices.
-
-      2. Fill the dumplings:
-         Place a spoonful of filling in the center of each dumpling wrapper. Wet the edges and fold to seal.
-
-      3. Steam the dumplings:
-         Arrange dumplings in a steamer. Steam for about 10 minutes.
-
-      4. Serve:
-         Enjoy these dumplings hot, with a dipping sauce of your choice.
-    `,
-    creator: 'Emily Chen',
-    creator_email: 'emilychen@example.com',
+    id: 5,
+    name: "Mario Rossi",
+    email: "mariorossi@example.com",
+    password: "secret",
   },
   {
-    title: 'Classic Mac n Cheese',
-    slug: 'classic-mac-n-cheese',
-    image: 'macncheese.jpg',
-    summary:
-      "Creamy and cheesy macaroni, a comforting classic that's always a crowd-pleaser.",
-    instructions: `
-      1. Cook the macaroni:
-         Boil macaroni according to package instructions until al dente.
-
-      2. Prepare cheese sauce:
-         In a saucepan, melt butter, add flour, and gradually whisk in milk until thickened. Stir in grated cheese until melted.
-
-      3. Combine:
-         Mix the cheese sauce with the drained macaroni.
-
-      4. Bake:
-         Transfer to a baking dish, top with breadcrumbs, and bake until golden.
-
-      5. Serve:
-         Serve hot, garnished with parsley if desired.
-    `,
-    creator: 'Laura Smith',
-    creator_email: 'laurasmith@example.com',
+    id: 6,
+    name: "Franz Huber",
+    email: "franzhuber@example.com",
+    password: "secret",
   },
   {
-    title: 'Authentic Pizza',
-    slug: 'authentic-pizza',
-    image: 'pizza.jpg',
-    summary:
-      'Hand-tossed pizza with a tangy tomato sauce, fresh toppings, and melted cheese.',
-    instructions: `
-      1. Prepare the dough:
-         Knead pizza dough and let it rise until doubled in size.
-
-      2. Shape and add toppings:
-         Roll out the dough, spread tomato sauce, and add your favorite toppings and cheese.
-
-      3. Bake the pizza:
-         Bake in a preheated oven at 220°C for about 15-20 minutes.
-
-      4. Serve:
-         Slice hot and enjoy with a sprinkle of basil leaves.
-    `,
-    creator: 'Mario Rossi',
-    creator_email: 'mariorossi@example.com',
-  },
-  {
-    title: 'Wiener Schnitzel',
-    slug: 'wiener-schnitzel',
-    image: 'schnitzel.jpg',
-    summary:
-      'Crispy, golden-brown breaded veal cutlet, a classic Austrian dish.',
-    instructions: `
-      1. Prepare the veal:
-         Pound veal cutlets to an even thickness.
-
-      2. Bread the veal:
-         Coat each cutlet in flour, dip in beaten eggs, and then in breadcrumbs.
-
-      3. Fry the schnitzel:
-      Heat oil in a pan and fry each schnitzel until golden brown on both sides.
-
-      4. Serve:
-      Serve hot with a slice of lemon and a side of potato salad or greens.
- `,
-    creator: 'Franz Huber',
-    creator_email: 'franzhuber@example.com',
-  },
-  {
-    title: 'Fresh Tomato Salad',
-    slug: 'fresh-tomato-salad',
-    image: 'tomato-salad.jpg',
-    summary:
-      'A light and refreshing salad with ripe tomatoes, fresh basil, and a tangy vinaigrette.',
-    instructions: `
-      1. Prepare the tomatoes:
-        Slice fresh tomatoes and arrange them on a plate.
-    
-      2. Add herbs and seasoning:
-         Sprinkle chopped basil, salt, and pepper over the tomatoes.
-    
-      3. Dress the salad:
-         Drizzle with olive oil and balsamic vinegar.
-    
-      4. Serve:
-         Enjoy this simple, flavorful salad as a side dish or light meal.
-    `,
-    creator: 'Sophia Green',
-    creator_email: 'sophiagreen@example.com',
+    id: 7,
+    name: "Sophia Green",
+    email: "sophiagreen@example.com",
+    password: "secret",
   },
 ];
 
-db.prepare(`
-   CREATE TABLE IF NOT EXISTS meals (
-       id INTEGER PRIMARY KEY AUTOINCREMENT,
-       slug TEXT NOT NULL UNIQUE,
-       title TEXT NOT NULL,
-       image TEXT NOT NULL,
-       summary TEXT NOT NULL,
-       instructions TEXT NOT NULL,
-       creator TEXT NOT NULL,
-       creator_email TEXT NOT NULL
-    )
-`).run();
+// 4-B  meals (creator_id links back to the user above)
+const dummyMeals = [
+  {
+    slug: "juicy-cheese-burger",
+    title: "Juicy Cheese Burger",
+    image: "burger.jpg",
+    summary:
+      "A mouth-watering burger with a juicy beef patty and melted cheese, served in a soft bun.",
+    instructions: `
+1. **Prepare the patty** – Mix 200 g ground beef with salt & pepper; form into a patty.
+2. **Cook** – Sear 2-3 min per side.
+3. **Assemble** – Toast bun, add lettuce & tomato, patty, slice of cheese.
+4. **Serve** – Cap with the top bun and enjoy hot.
+    `.trim(),
+    creator_id: 1,
+  },
+  {
+    slug: "spicy-curry",
+    title: "Spicy Curry",
+    image: "curry.jpg",
+    summary:
+      "A rich and spicy curry, infused with exotic spices and creamy coconut milk.",
+    instructions: `
+1. **Chop veg** – Bite-size pieces.
+2. **Sauté** – Until softened.
+3. **Curry paste** – Stir in 2 Tbsp paste, cook 1 min.
+4. **Simmer** – 500 ml coconut milk, 15 min.
+5. **Serve** – Ladle over rice or bread.
+    `.trim(),
+    creator_id: 2,
+  },
+  {
+    slug: "homemade-dumplings",
+    title: "Homemade Dumplings",
+    image: "dumplings.jpg",
+    summary:
+      "Tender dumplings filled with savory meat and vegetables, steamed to perfection.",
+    instructions: `
+1. **Filling** – Minced meat, veg, spices.
+2. **Fill wrappers** – Wet edges, seal.
+3. **Steam** – 10 min.
+4. **Serve** – Hot with dipping sauce.
+    `.trim(),
+    creator_id: 3,
+  },
+  {
+    slug: "classic-mac-n-cheese",
+    title: "Classic Mac n Cheese",
+    image: "macncheese.jpg",
+    summary:
+      "Creamy and cheesy macaroni – a comforting classic that’s always a crowd-pleaser.",
+    instructions: `
+1. **Boil macaroni** – Until al dente.
+2. **Cheese sauce** – Butter + flour roux, whisk in milk, melt cheese.
+3. **Combine** – Stir sauce into pasta.
+4. **Bake** – Breadcrumb topping, golden.
+    `.trim(),
+    creator_id: 4,
+  },
+  {
+    slug: "authentic-pizza",
+    title: "Authentic Pizza",
+    image: "pizza.jpg",
+    summary:
+      "Hand-tossed pizza with tangy tomato sauce, fresh toppings, and melted cheese.",
+    instructions: `
+1. **Dough** – Knead & proof.
+2. **Shape & top** – Sauce, toppings, cheese.
+3. **Bake** – 220 °C, 15-20 min.
+4. **Serve** – Slice hot, add basil.
+    `.trim(),
+    creator_id: 5,
+  },
+  {
+    slug: "wiener-schnitzel",
+    title: "Wiener Schnitzel",
+    image: "schnitzel.jpg",
+    summary:
+      "Crispy, golden-brown breaded veal cutlet – a classic Austrian dish.",
+    instructions: `
+1. **Pound veal** – Even thickness.
+2. **Breading** – Flour → egg → breadcrumbs.
+3. **Fry** – Until golden both sides.
+4. **Serve** – With lemon wedge.
+    `.trim(),
+    creator_id: 6,
+  },
+  {
+    slug: "fresh-tomato-salad",
+    title: "Fresh Tomato Salad",
+    image: "tomato-salad.jpg",
+    summary:
+      "Light and refreshing salad with ripe tomatoes, fresh basil, and a tangy vinaigrette.",
+    instructions: `
+1. **Slice tomatoes** – Arrange on plate.
+2. **Season** – Basil, salt, pepper.
+3. **Dress** – Olive oil & balsamic.
+    `.trim(),
+    creator_id: 7,
+  },
+];
 
-async function initData() {
-  const stmt = db.prepare(`
-      INSERT INTO meals VALUES (
-         null,
-         @slug,
-         @title,
-         @image,
-         @summary,
-         @instructions,
-         @creator,
-         @creator_email
-      )
-   `);
+// 4-C  likes – a few sample “user likes meal” rows
+const dummyLikes = [
+  { user_id: 2, meal_slug: "juicy-cheese-burger" },
+  { user_id: 3, meal_slug: "juicy-cheese-burger" },
+  { user_id: 1, meal_slug: "spicy-curry" },
+  { user_id: 4, meal_slug: "authentic-pizza" },
+  { user_id: 5, meal_slug: "classic-mac-n-cheese" },
+];
 
-  for (const meal of dummyMeals) {
-    stmt.run(meal);
-  }
-}
+// ------------------------------------------------------------
+// 5. Insert everything inside one transaction for speed / safety
+// ------------------------------------------------------------
+db.transaction(() => {
+  // 5-A insert users
+  const userStmt = db.prepare(
+    `INSERT INTO users (id,email,password,name)
+     VALUES (@id,@email,@password,@name)`
+  );
+  dummyUsers.forEach((u) => userStmt.run(u));
 
-initData();
+  // 5-B insert meals
+  const mealStmt = db.prepare(
+    `INSERT INTO meals
+      (slug,title,image,summary,instructions,creator_id)
+     VALUES
+      (@slug,@title,@image,@summary,@instructions,@creator_id)`
+  );
+  dummyMeals.forEach((m) => mealStmt.run(m));
+
+  // 5-C resolve meal-IDs → insert likes
+  const likeStmt = db.prepare(
+    `INSERT INTO likes (user_id, meal_id) VALUES (?, ?)`
+  );
+  dummyLikes.forEach(({ user_id, meal_slug }) => {
+    const mealId = db
+      .prepare("SELECT id FROM meals WHERE slug = ?")
+      .get(meal_slug)?.id;
+    if (mealId) likeStmt.run(user_id, mealId);
+  });
+})();
+
+console.log("✅ Database initialised with dummy data!");
