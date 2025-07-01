@@ -21,7 +21,6 @@ db.exec("PRAGMA foreign_keys = ON;");
 // 2. Drop existing tables so the script is always idempotent
 // ------------------------------------------------------------
 db.exec(`
-  DROP TABLE IF EXISTS likes;
   DROP TABLE IF EXISTS meals;
   DROP TABLE IF EXISTS sessions;
   DROP TABLE IF EXISTS users;
@@ -59,14 +58,7 @@ db.exec(`
     FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE CASCADE
   );
 
-  /* --- likes (join table) --- */
-  CREATE TABLE likes (
-    user_id INTEGER NOT NULL,
-    meal_id INTEGER NOT NULL,
-    PRIMARY KEY (user_id, meal_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (meal_id) REFERENCES meals(id) ON DELETE CASCADE
-  );
+
 `);
 
 // ------------------------------------------------------------
@@ -211,15 +203,6 @@ const dummyMeals = [
   },
 ];
 
-// 4-C  likes – a few sample “user likes meal” rows
-const dummyLikes = [
-  { user_id: 2, meal_slug: "juicy-cheese-burger" },
-  { user_id: 3, meal_slug: "juicy-cheese-burger" },
-  { user_id: 1, meal_slug: "spicy-curry" },
-  { user_id: 4, meal_slug: "authentic-pizza" },
-  { user_id: 5, meal_slug: "classic-mac-n-cheese" },
-];
-
 // ------------------------------------------------------------
 // 5. Insert everything inside one transaction for speed / safety
 // ------------------------------------------------------------
@@ -239,17 +222,6 @@ db.transaction(() => {
       (@slug,@title,@image,@summary,@instructions,@creator_id)`
   );
   dummyMeals.forEach((m) => mealStmt.run(m));
-
-  // 5-C resolve meal-IDs → insert likes
-  const likeStmt = db.prepare(
-    `INSERT INTO likes (user_id, meal_id) VALUES (?, ?)`
-  );
-  dummyLikes.forEach(({ user_id, meal_slug }) => {
-    const mealId = db
-      .prepare("SELECT id FROM meals WHERE slug = ?")
-      .get(meal_slug)?.id;
-    if (mealId) likeStmt.run(user_id, mealId);
-  });
 })();
 
 console.log("✅ Database initialised with dummy data!");
