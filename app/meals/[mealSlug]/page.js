@@ -29,7 +29,7 @@ export async function generateStaticParams() {
 export default async function MealDetailsPage({ params }) {
   const { mealSlug } = await params;
 
-  const meal = getMeal(mealSlug);
+  const meal = await getMeal(mealSlug);
 
   if (!meal) {
     notFound();
@@ -52,7 +52,7 @@ export default async function MealDetailsPage({ params }) {
             alt={meal.title}
             fill
             className={classes.image}
-            sizes="(min-width: 768px) 50vw, 100vw"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
 
